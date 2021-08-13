@@ -1,0 +1,7 @@
+node_modules
+.vscode
+nodemon.json
+dist
+compiler.sh
+package-adapter.py
+.env
