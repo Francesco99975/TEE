@@ -2,6 +2,8 @@ import http from "http";
 import express from  "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import cron from "node-cron";
+import Encode from "./models/encode";
 import teeRoutes from "./routes/tee";
 
 
@@ -22,6 +24,15 @@ const whitelist = [
 ]
 
 const app = express();
+
+cron.schedule('59 23 * * 7', async () => {
+    try {
+        console.log("Resetting Database");
+        await Encode.deleteMany();
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 app.use(express.static(process.cwd()+"/tee-app"));
 
