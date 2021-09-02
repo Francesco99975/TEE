@@ -5,6 +5,7 @@ import cron from "node-cron";
 import Encode from "./models/encode";
 import teeRoutes from "./routes/tee";
 import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 
 let result = dotenv.config();
 
@@ -13,7 +14,13 @@ if (result.error) console.log(result.error);
 
 const PORT = process.env.PORT || 5000;
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+  });
+
 const app = express();
+app.set('trust proxy', 1);
 
 cron.schedule('59 23 * * 7', async () => {
     try {
@@ -23,6 +30,8 @@ cron.schedule('59 23 * * 7', async () => {
         console.log(error);
     }
 });
+
+app.use(limiter);
 
 app.use(express.static(process.cwd()+"/tee-app"));
 
