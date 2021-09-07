@@ -2,10 +2,12 @@ import http from "http";
 import express from  "express";
 import mongoose from "mongoose";
 import cron from "node-cron";
-import Encode from "./models/encode";
-import teeRoutes from "./routes/tee";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
+
+import Encode from "./models/encode";
+import teeRoutes from "./routes/tee";
+import { HttpException } from "./interfaces/error";
 
 let result = dotenv.config();
 
@@ -42,6 +44,15 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/tee', teeRoutes);
+
+app.use((req, res, next) => {
+    return res.status(404).json({ message: "Route not found" });
+});
+
+app.use((error: HttpException, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.log(error);
+    return res.status(error.code || 500).json({ message: error.message || "An error occurred on the server" });
+});
 
 const server = http.createServer(app);
 

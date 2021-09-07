@@ -2,23 +2,31 @@ import { Request, Response, NextFunction } from "express";
 import { encrypt, decrypt, checkData } from "../helpers/encryption";
 
 export async function onEncrypt(req: Request, res: Response, next: NextFunction) {
-    await checkData(req.body);
+    try {
+        await checkData(req.body);
 
-    let response = {};
+        let response = {};
 
-    for (const key in req.body) {
-        response = {...response, [key]: await encrypt(req.body[key])};
+        for (const key in req.body) {
+            response = {...response, [key]: await encrypt(req.body[key])};
+        }
+
+        return res.json(response);
+    } catch (error) {
+        next(error);
     }
-
-    return res.json(response);
 }
 
 export async function onDecrypt(req: Request, res: Response, next: NextFunction) {
-    let response = {};
+    try {
+        let response = {};
 
-    for (const key in req.body) {
-        response = {...response, [key]: await decrypt(req.body[key])};
+        for (const key in req.body) {
+            response = {...response, [key]: await decrypt(req.body[key])};
+        }
+
+        return res.json(response);
+    } catch (error) {
+        next(error);
     }
-
-    return res.json(response);
 }
