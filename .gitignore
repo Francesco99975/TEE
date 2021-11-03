@@ -5,3 +5,4 @@ dist
 compiler.sh
 package-adapter.py
 .env
+tee-app
