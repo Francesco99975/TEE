@@ -12,7 +12,7 @@ const BigBase64 = {
 
     fromNumber : function(number: BigNumber) {
         if(number.isNaN() || !number.isInteger()) 
-            throw "The input is not valid";
+            throw `The input: ${number} is not valid`;
         if (number.isNegative())
             throw "Can't represent negative numbers now";
 
@@ -100,7 +100,7 @@ export async function encrypt(message: string, key?: string): Promise<string> {
     let encryptedMessage: string = "";
 
     if(key) {
-        encryptedMessage += process.env.KEY_ON!;
+        encryptedMessage += +process.env.KEY_ON!;
         encryptedMessage += key.length.toString(2).padStart(+process.env.KEY_PAD!, '0');
 
         for(let x of key) {
@@ -112,7 +112,7 @@ export async function encrypt(message: string, key?: string): Promise<string> {
             encryptedMessage += randomizer.length.toString(2) + zerOne() + encodedChar.length.toString(2).padStart(+process.env.PAD!, '0') + zerOne() + randomizer + encodedChar + zerOne();
         }
     } else {
-        encryptedMessage += process.env.KEY_OFF!;
+        encryptedMessage += +process.env.KEY_OFF!;
     }
     
     for(let x of message) {

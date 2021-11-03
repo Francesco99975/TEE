@@ -1,6 +1,7 @@
 version: "3"
 services:
   tee-server:
-    image: francesco99975/tee-server
+    container_name: tee
+    image: francesco99975/tee
     ports:
       - "5500:5500"
