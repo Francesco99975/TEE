@@ -2,6 +2,23 @@ version: "3"
 services:
   tee-server:
     container_name: tee
-    image: francesco99975/tee
+    image: tee
+    restart: unless-stopped
     ports:
       - "5500:5500"
+    depends_on:
+      - mongo
+  mongo:
+    container_name: encodedb
+    image: "mongo:4.4.5-bionic"
+    ports:
+      - "2717:27017"
+    volumes:
+      - tee-data:/data/db
+      - tee-mongo-config:/data/configdb
+
+volumes:
+  tee-data:
+    driver: local
+  tee-mongo-config:
+    driver: local

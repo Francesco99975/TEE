@@ -5,6 +5,7 @@
   "main": "./dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf ./dist && tsc && rsync -av --progress --exclude={'*.ts*','nodemon.json','tsconfig.json','dist','.vscode','node_modules','src','.git','Dockerfile','docker-compose.yml','.gitignore'} . ./dist",
     "start": "tsc && rsync -av --progress --exclude={'*.ts*','nodemon.json','tsconfig.json','dist','.vscode','node_modules','src','.git'} . ./dist && node ./dist/app.js",
     "start:dev": "tsc && rsync -av --progress --exclude={'*.ts*','nodemon.json','tsconfig.json','dist','.vscode','node_modules','src','.git'} . ./dist && tsc-watch --project . --onSuccess 'nodemon ./dist/app.js'"
   },
